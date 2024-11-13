@@ -20,17 +20,12 @@ namespace Task_1.Service.Bills
                 CustomerId = entity.CustomerId,
                 EmployeeId = entity.EmployeeId,
                 TotelPrice = entity.TotelPrice,
-       
                 Items = entity.Items.Select(x => new BillItems
                 {
-                    Id = x.Id,
-                    Quntity = (int)x.Quntity,
-                    item=new Item { Price = x.Price},
-                    BillingId = (int)x.BillingId,
-                    ItemId = (int)x.ItemId,
-                    
-                }).ToList(),
-                
+                    ItemId = x.ItemId??0 ,
+                    Quntity = x.Quntity??1,
+                     item=new Item { Price = x.Price }
+                }).ToList()
 
             };
             Repo.Create(Bill);
@@ -61,7 +56,7 @@ namespace Task_1.Service.Bills
                         Quntity = i.Quntity,
                         ItemId = i.ItemId,
                         BillingId = i.BillingId,
-                        Price = i.item?.Price ?? 0,  
+                        Price = i.item.Price  ,  
                         Id = i.Id,
                     })
                     .ToList(),

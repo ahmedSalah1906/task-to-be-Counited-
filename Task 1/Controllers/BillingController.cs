@@ -38,8 +38,13 @@ namespace Task_1.Controllers
             {
                 EmployeesList = employeeService.GetAll().Select(e => new SelectListItem { Value = e.Id.ToString(), Text = e.Name }).ToList(),
                 CustomerList = customerService.GetAll().Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name }).ToList(),
-                ItemsList = itemService.GetAll().Select(i => new SelectListItem { Value = i.Id.ToString(), Text = i.Name }).ToList()
             };
+
+            model.Items.Add(new BillingItemVm
+            {
+                Items = itemService.GetAll().Select(i => new SelectListItem { Value = i.Id.ToString(), Text = i.Name }).ToList()
+            });
+
 
             return View("CreateBill",model);
         }
@@ -50,7 +55,10 @@ namespace Task_1.Controllers
             {
                 vm.EmployeesList = employeeService.GetAll().Select(e => new SelectListItem { Value = e.Id.ToString(), Text = e.Name }).ToList();
                 vm.CustomerList = customerService.GetAll().Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name }).ToList();
-                vm.ItemsList = itemService.GetAll().Select(i => new SelectListItem { Value = i.Id.ToString(), Text = i.Name }).ToList();
+                foreach (var item in vm.Items)
+                {
+                    item.Items = itemService.GetAll().Select(i => new SelectListItem { Value = i.Id.ToString(), Text = i.Name }).ToList();
+                }
 
                 return View("CreateBill", vm);
             }
@@ -71,8 +79,19 @@ namespace Task_1.Controllers
                 Id = index,
                 Items = itemService.GetAll().Select(i => new SelectListItem { Value = i.Id.ToString(), Text = i.Name }).ToList()
             };
+            
 
             return PartialView("_ItemPartial", model);
+        }
+        [HttpGet]
+        public JsonResult GetItemPrice(int id)
+        {
+            var item = itemService.GetById(id);
+            if (item != null)
+            {
+                return Json(item.Price);
+            }
+            return Json(0); 
         }
 
 

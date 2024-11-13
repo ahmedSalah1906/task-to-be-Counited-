@@ -1,75 +1,81 @@
 ﻿@model Task_1.VM.BillingVm
 
-<div class="container bg-light p-4 rounded shadow-sm">
-    <h3 class="mb-4">Create New Billing</h3>
+@{
+    ViewData["Title"] = "Create Bill";
+}
 
-    <form asp-action="Create" method="post">
-        <input type="hidden" asp-for="Id" />
+<h2>Create Bill</h2>
 
-        <!-- Employee Dropdown -->
-        <div class="mb-3 row">
-            <label asp-for="EmployeeId" class="col-md-2 col-form-label">Employee</label>
-            <div class="col-md-8">
-                <select asp-for="EmployeeId" asp-items="Model.EmployeesList" class="form-select">
-                    <option value="">Select Employee</option>
-                </select>
-                <span asp-validation-for="EmployeeId" class="text-danger"></span>
-            </div>
-        </div>
+<form asp-action="Create" method="post" id="create-bill-form">
+  <input type="hidden" asp-for="Id"  />
+    <div>
+        <label for="EmployeeId">Employee:</label>
+        <select asp-for="EmployeeId" asp-items="Model.EmployeesList" class="form-control"></select>
+    </div>
 
-        <!-- Customer Dropdown -->
-        <div class="mb-3 row">
-            <label asp-for="CustomerId" class="col-md-2 col-form-label">Customer</label>
-            <div class="col-md-8">
-                <select asp-for="CustomerId" asp-items="Model.CustomerList" class="form-select">
-                    <option value="">Select Customer</option>
-                </select>
-                <span asp-validation-for="CustomerId" class="text-danger"></span>
-            </div>
-        </div>
+    <div>
+        <label for="CustomerId">Customer:</label>
+        <select asp-for="CustomerId" asp-items="Model.CustomerList" class="form-control"></select>
+    </div>
 
-        <!-- Item Section (Initial Items) -->
-        <div id="item-section" class="mb-3">
-            @for (int i = 0; i < Model.Items.Count; i++)
-            {
-                <partial name="_ItemPartial" model="Model.Items[i]" />
-            }
-        </div>
+    <hr />
 
-        <!-- Add Item Button and Save Billing Button -->
-        <div class="mb-4">
-            <button type="button" class="btn btn-secondary me-2" onclick="addItem()">Add More Item</button>
-            <button type="submit" class="btn btn-primary">Save Billing</button>
-        </div>
+    <h4>Items</h4>
+    <div id="items-container">
+        @for (int i = 0; i < Model.Items.Count; i++)
+        {
+            <partial name="_ItemPartial" for="@Model.Items[i]" />
+        }
+    </div>
 
-        <!-- Total Price Display -->
-        <div class="mt-3">
-            <strong>Total Price:</strong> <span id="total-price">0.00</span>
-        </div>
-    </form>
-</div>
+    <button type="button" id="add-item-btn" class="btn btn-secondary">Add Item</button>
+    <br /><br />
+
+    <div>
+        <label asp-for="TotelPrice" >Total Price:</label>
+        <input type="text"asp-for="TotelPrice" id="total-price" name="TotalPrice" readonly class="form-control" value="0" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit Bill</button>
+</form>
 
 @section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        let itemCount = @Model.Items.Count;
+        var itemIndex = @Model.Items.Count;
 
-        // Function to add more items dynamically
-        function addItem() {
-            $.get('@Url.Action("RenderItemPartial")', { index: itemCount }, function (partialViewResult) {
-                $('#item-section').append(partialViewResult);
-                itemCount++;  // Increment item count after adding a new item
+        // Add new item row dynamically
+        $('#add-item-btn').on('click', function () {
+            $.get('/Billing/RenderItemPartial', { index: itemIndex++ }, function (response) {
+                $('#items-container').append(response);
             });
-        }
+        });
 
-        // Function to update the total price whenever item quantity or price changes
-        function updateTotal() {
-            let totalPrice = 0;
-            $(".item-entry").each(function () {
-                const price = parseFloat($(this).find(".item-price").text()) || 0;
-                const quantity = parseInt($(this).find(".item-quantity").val()) || 0;
+        // Update item price and calculate total price when an item is selected
+        $(document).on('change', '.item-select', function () {
+            var itemId = $(this).val();
+            var $priceField = $(this).closest('.item-row').find('.item-price');
+            var $quantityField = $(this).closest('.item-row').find('.item-quantity');
+
+            $.get('/Billing/GetItemPrice', { id: itemId }, function (price) {
+                $priceField.val(price);
+                updateTotalPrice();
+            });
+        });
+
+        // Update total price when quantity changes
+        $(document).on('input', '.item-quantity', function () {
+            updateTotalPrice();
+        });
+
+        function updateTotalPrice() {
+            var totalPrice = 0;
+            $('.item-row').each(function () {
+                var price = parseFloat($(this).find('.item-price').val()) || 0;
+                var quantity = parseInt($(this).find('.item-quantity').val()) || 0;
                 totalPrice += price * quantity;
             });
-            document.getElementById("total-price").innerText = totalPrice.toFixed(2);
+            $('#total-price').val(totalPrice.toFixed(2)); 
         }
     </script>
 }

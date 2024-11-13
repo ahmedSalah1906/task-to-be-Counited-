@@ -1,41 +1,16 @@
 ﻿@model Task_1.VM.BillingItemVm
 
-<div class="item-entry border p-3 mb-3 rounded">
-    <input type="hidden" name="Items[@Model.Id].Id" value="@Model.Id" />
+<div class="item-row">
+    
+    <input type="hidden" asp-for="Id"; />
+    <label>Item:</label>
+    <select asp-for="ItemId" asp-items="Model.Items" class="form-control item-select"></select>
 
-    <div class="row mb-2">
-        <label class="col-md-3 col-form-label">Item</label>
-        <div class="col-md-7">
-            <select name="Items[@Model.Id].ItemId" asp-items="Model.Items" class="form-select" onchange="updatePrice(this)">
-                <option value="">Select Item</option>
-                @foreach (var item in Model.Items)
-                {
-                    <option value="@item.Value" data-price="@item.Text">@item.Text</option>
-                }
-            </select>
-        </div>
-    </div>
+    <label>Price:</label>
+    <input type="text" asp-for="Price" class="form-control item-price" value="0" readonly />
 
-    <div class="row mb-2">
-        <label class="col-md-3 col-form-label">Quantity</label>
-        <div class="col-md-7">
-            <input name="Items[@Model.Id].Quntity" type="number" class="form-control item-quantity" min="1" value="@Model.Quntity" onchange="updateTotal()" placeholder="Enter quantity" />
-        </div>
-    </div>
+    <label>Quantity:</label>
+    <input type="number" asp-for="Quntity" class="form-control item-quantity" value="1" min="1" />
 
-    <div class="row">
-        <label class="col-md-3 col-form-label">Price</label>
-        <div class="col-md-7">
-            <span class="item-price">0.00</span>
-        </div>
-    </div>
+    <br />
 </div>
-
-<script>
-    function updatePrice(dropdown) {
-        const selectedItem = dropdown.options[dropdown.selectedIndex];
-        const price = parseFloat(selectedItem.getAttribute('data-price')) || 0;
-        $(dropdown).closest(".item-entry").find(".item-price").text(price.toFixed(2));
-        updateTotal();
-    }
-</script>
