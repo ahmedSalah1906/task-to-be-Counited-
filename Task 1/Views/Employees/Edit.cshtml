@@ -1,0 +1,33 @@
+﻿@model Task_1.VM.EmployeeVm
+<form asp-action="Update" method="post" class="form-horizontal">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label asp-for="Name" class="control-label col-md-2">Name</label>
+        <div class="col-md-4">
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="age" class="control-label col-md-2">Age</label>
+        <div class="col-md-4">
+            <input asp-for="age" class="form-control" />
+            <span asp-validation-for="age" class="text-danger"></span>
+        </div>
+        <div class="form-group mt-2">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" class="btn btn-primary">Update Employee</button>
+            </div>
+        </div>
+</form>
+<div class="form-group mt-4">
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+
+
+

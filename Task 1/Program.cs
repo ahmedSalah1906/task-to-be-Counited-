@@ -17,18 +17,20 @@ builder.Services.AddControllersWithViews();
 //Adding Db Contection String 
 builder.Services.AddDbContext<BillingContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("cs")));
-#region Repository Resolve
+#region Reposirory resolve
 builder.Services.AddScoped<IEmployeeRepositry,EmployeeRepository>();
-builder.Services.AddScoped<IItemReopsitory,ItemRepository>();
-builder.Services.AddScoped<ICustomerRepository,CustomerRepository>();
-builder.Services.AddScoped<IBillingRepository,BillingRepository>();
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IItemReopsitory, ItemRepository>();
+builder.Services.AddScoped<IBillingRepository, BillingRepository>();
+
 #endregion
-#region Service Resolve 
-builder.Services.AddScoped<IEmployeeService,EmployeeService>();
-builder.Services.AddScoped<ICustomerService,CustomerService>();
-builder.Services.AddScoped<IItemService,ItemService>();
-builder.Services.AddScoped<IBillingService,BillingService>();
+#region Service Resolve
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IItemService, ItemService>();
+builder.Services.AddScoped<IBillingService, BillingService>();
 #endregion
+
 var app = builder.Build();
 
 
