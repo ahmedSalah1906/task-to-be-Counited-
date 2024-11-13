@@ -1,0 +1,43 @@
+﻿@using Task_1.VM
+@model List<BillingVm>
+@{
+    ViewBag.Title = "Billing List";
+}
+<h2>Billing List</h2>
+<table class="table table-striped table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>CreatedAt</th>
+            <th>TotelPrice</th>
+            <th>PhoneNumber</th>
+            <th>EmployeeName</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var Billing in Model)
+        {
+            <tr>
+                <td>@Billing.Id</td>
+                <td>@Billing.CreatedAt</td>
+                <td>@Billing.TotelPrice</td>
+                <td>@Billing.ItemsList</td>
+
+                <td>
+                    <a class="btn btn-primary btn-sm" asp-action="Update" asp-route-id="@Billing.Id">Edit</a>
+                    <form asp-action="Delete" method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="@Billing.Id" />
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this Bill?')">Delete</button>
+                    </form>
+
+                </td>
+            </tr>
+
+        }
+
+    </tbody>
+
+</table>
+
+<a class="btn btn-success" asp-action="Create">Create New Bills</a>
+

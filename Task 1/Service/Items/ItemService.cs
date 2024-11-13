@@ -39,7 +39,7 @@ namespace Task_1.Service.Items
             var item = Repo.GetAll();
             var itemVm = item.Select(e => new ItemVm()
             {
-                id=e.Id,
+                Id=e.Id,
                 Description = e.Description,
                 Name = e.Name,
                 Price = e.Price,
@@ -53,7 +53,7 @@ namespace Task_1.Service.Items
             var item = Repo.GetById(id);
             var itemVm = new ItemVm()
             {
-                id = id,
+                Id = id,
                 Description= item.Description,
                 Name = item.Name,
                 Price = item.Price,
@@ -67,7 +67,7 @@ namespace Task_1.Service.Items
             if (entity == null) throw new ArgumentNullException(nameof(entity));
             var item = new Item()
             { 
-                Id=entity.id,
+             Id=entity.Id,
             Description = entity.Description,
             Name = entity.Name,
             Price = entity.Price,

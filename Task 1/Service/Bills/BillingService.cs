@@ -23,9 +23,12 @@ namespace Task_1.Service.Bills
        
                 Items = entity.Items.Select(x => new BillItems
                 {
-                    ItemId = x.ItemId,
-                    Quntity = x.Quntity,
-                    BillingId = x.BillingId,
+                    Id = x.Id,
+                    Quntity = (int)x.Quntity,
+                    item=new Item { Price = x.Price},
+                    BillingId = (int)x.BillingId,
+                    ItemId = (int)x.ItemId,
+                    
                 }).ToList(),
                 
 
@@ -45,27 +48,26 @@ namespace Task_1.Service.Bills
             var Bills = Repo.GetAll();
             var BillVm = Bills.Select(x => new BillingVm
             {
-                CreatedAt = DateTime.Now,
-                CustomerName = x.Customer.Name,
-                EmployeeName = x.Employee.Name,
-                CustomerId = x.Customer.Id,
-                EmployeeId = x.Employee.Id,
+                CreatedAt = x.CreatedAt,
+                CustomerId = x.Customer?.Id ?? 0,  
+                EmployeeId = x.Employee?.Id ?? 0,
+                Id = x.Id,
                 TotelPrice = x.TotelPrice,
-                Items = x.Items.Select(i => new BillItems
-                {
-                    Quntity=i.Quntity,
-                    ItemId = i.ItemId,
-                    BillingId = i.BillingId,
 
-
-
-                }).ToList(),
-
+                Items = x.Items
+                    .Where(i => i != null && i.item != null)  
+                    .Select(i => new BillingItemVm
+                    {
+                        Quntity = i.Quntity,
+                        ItemId = i.ItemId,
+                        BillingId = i.BillingId,
+                        Price = i.item?.Price ?? 0,  
+                        Id = i.Id,
+                    })
+                    .ToList(),
             }).ToList();
-            return BillVm;
-            
 
-            
+            return BillVm;
         }
 
         public BillingVm GetById(int id)
@@ -75,15 +77,17 @@ namespace Task_1.Service.Bills
             {
                 CreatedAt = DateTime.Now,
                 CustomerId = Bill.Customer.Id,
-                CustomerName = Bill.Customer.Name,
+                TotelPrice= Bill.TotelPrice,
+                
                 EmployeeId = Bill.Employee.Id,
-                EmployeeName = Bill.Employee.Name,
-                Items = Bill.Items.Select(i => new BillItems
+
+                Items = Bill.Items.Select(i => new BillingItemVm
                 {
                     Quntity = i.Quntity,
                     ItemId = i.ItemId,
                     BillingId = i.BillingId,
-
+                    Price=i.item.Price,
+                    Id = i.Id,
                 }).ToList(),
             };
             return billvm;
@@ -100,9 +104,11 @@ namespace Task_1.Service.Bills
 
                 Items = entity.Items.Select(x => new BillItems
                 {
-                    ItemId = x.ItemId,
-                    Quntity = x.Quntity,
-                    BillingId = x.BillingId,
+                    ItemId = (int)x.ItemId,
+                    Quntity = (int)x.Quntity,
+                    BillingId =(int) x.BillingId,
+                    item=new Item { Price=x.Price},
+                    Id = x.Id,
                 }).ToList(),
 
 
