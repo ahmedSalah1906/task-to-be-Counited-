@@ -1,41 +1,27 @@
 ﻿@model Task_1.VM.BillingItemVm
 
-<div class="item-entry border p-3 mb-3 rounded">
-    <input type="hidden" name="Items[@Model.Id].Id" value="@Model.Id" />
-
-    <div class="row mb-2">
-        <label class="col-md-3 col-form-label">Item</label>
-        <div class="col-md-7">
-            <select name="Items[@Model.Id].ItemId" asp-items="Model.Items" class="form-select" onchange="updatePrice(this)">
-                <option value="">Select Item</option>
-                @foreach (var item in Model.Items)
-                {
-                    <option value="@item.Value" data-price="@item.Text">@item.Text</option>
-                }
-            </select>
-        </div>
+<div class="item-entry mb-3 row">
+    <div class="col-md-5">
+        <select asp-for="ItemId" asp-items="Model.Items" class="form-select item-id" onchange="updateTotal()">
+            <option value="">Select Item</option>
+        </select>
+        <span asp-validation-for="ItemId" class="text-danger"></span>
     </div>
-
-    <div class="row mb-2">
-        <label class="col-md-3 col-form-label">Quantity</label>
-        <div class="col-md-7">
-            <input name="Items[@Model.Id].Quntity" type="number" class="form-control item-quantity" min="1" value="@Model.Quntity" onchange="updateTotal()" placeholder="Enter quantity" />
-        </div>
+    <div class="col-md-3">
+        <input asp-for="Quntity" class="form-control item-quantity" oninput="updateTotal()" />
+        <span asp-validation-for="Quntity" class="text-danger"></span>
     </div>
-
-    <div class="row">
-        <label class="col-md-3 col-form-label">Price</label>
-        <div class="col-md-7">
-            <span class="item-price">0.00</span>
-        </div>
+    <div class="col-md-3">
+        <span class="item-price">@Model.Price</span>
     </div>
 </div>
-
-<script>
-    function updatePrice(dropdown) {
-        const selectedItem = dropdown.options[dropdown.selectedIndex];
-        const price = parseFloat(selectedItem.getAttribute('data-price')) || 0;
-        $(dropdown).closest(".item-entry").find(".item-price").text(price.toFixed(2));
-        updateTotal();
-    }
-</script>
+@section Scripts {
+    <script>
+ function updatePrice(dropdown) {
+            const selectedItem = dropdown.options[dropdown.selectedIndex];
+            const price = parseFloat(selectedItem.getAttribute('data-price')) || 0;
+            $(dropdown).closest(".item-entry").find(".item-price").text(price.toFixed(2));
+            updateTotal();
+        }
+    </script>
+}

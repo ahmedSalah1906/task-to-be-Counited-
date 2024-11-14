@@ -52,12 +52,17 @@
 @section Scripts {
     <script>
         let itemCount = @Model.Items.Count;
-
+        $(document).ready(function () {
+            // Your code here
+            updatePrice(@Model.ItemsList);
+            
+        });
+       
         // Function to add more items dynamically
         function addItem() {
             $.get('@Url.Action("RenderItemPartial")', { index: itemCount }, function (partialViewResult) {
                 $('#item-section').append(partialViewResult);
-                itemCount++;  // Increment item count after adding a new item
+                itemCount++;  /
             });
         }
 
