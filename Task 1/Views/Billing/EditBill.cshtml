@@ -1,0 +1,93 @@
+﻿@model Task_1.VM.BillingVm
+
+@{
+    ViewData["Title"] = "Edit Billing";
+}
+
+<h2>Edit Billing</h2>
+
+<form asp-action="Update" method="post" id="edit-bill-form">
+    <input type="hidden" asp-for="Id" />
+
+    <div>
+        <label for="EmployeeId">Employee:</label>
+        <select asp-for="EmployeeId" asp-items="Model.EmployeesList" class="form-control"></select>
+    </div>
+
+    <div>
+        <label for="CustomerId">Customer:</label>
+        <select asp-for="CustomerId" asp-items="Model.CustomerList" class="form-control"></select>
+    </div>
+
+    <hr />
+
+    <h4>Items</h4>
+    <div id="items-container">
+       @for (int i = 0; i < Model.Items.Count; i++)
+        {
+             ViewData["Index"] = i;
+                @Html.Partial("_ItemPartial", Model.Items[i])
+        }
+    </div>
+
+    <button type="button" id="add-item-btn" class="btn btn-secondary">Add Item</button>
+    <br /><br />
+
+    <div>
+        <label asp-for="TotelPrice">Total Price:</label>
+        <input type="text" asp-for="TotelPrice" id="total-price" name="TotalPrice" readonly class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update Billing</button>
+</form>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+
+        $(document).ready(function() {
+            var itemIndex = @Model.Items.Count;
+
+            $('#add-item-btn').on('click', function () {
+                $.ajax({
+                    url: '/Billing/RenderItemPartial',
+                    type: 'GET',
+                    dataType: 'html',
+                    data: { index: itemIndex++ },
+                    success: function(response) {
+                        $('#items-container').append(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error fetching item partial view:", error);
+                        alert("Failed to add item. Please try again.");
+                    }
+                });
+            });
+        });
+
+        $(document).on('change', '.item-select', function () {
+            var itemId = $(this).val();
+            var $priceField = $(this).closest('.item-row').find('.item-price');
+            var $quantityField = $(this).closest('.item-row').find('.item-quantity');
+
+            $.get('/Billing/GetItemPrice', { id: itemId }, function (price) {
+                $priceField.val(price);
+                updateTotalPrice();
+            });
+        });
+
+        $(document).on('input', '.item-quantity', function () {
+            updateTotalPrice();
+        });
+
+        function updateTotalPrice() {
+            var totalPrice = 0;
+            $('.item-row').each(function () {
+                var price = parseFloat($(this).find('.item-price').val()) || 0;
+                var quantity = parseInt($(this).find('.item-quantity').val()) || 0;
+                totalPrice += price * quantity;
+            });
+            $('#total-price').val(totalPrice.toFixed(2));
+        }
+    </script>
+}

@@ -54,9 +54,9 @@ namespace Task_1.Service.Items
             var itemVm = new ItemVm()
             {
                 Id = id,
-                Description= item.Description,
-                Name = item.Name,
-                Price = item.Price,
+                Description= item.Description??" ",
+                Name = item.Name?? " ",
+                Price = item.Price ,
             };
             return itemVm;
 

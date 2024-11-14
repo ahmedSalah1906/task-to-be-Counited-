@@ -1,4 +1,5 @@
-﻿using Task_1.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Task_1.Models;
 
 namespace Task_1.Repository.Items
 {
@@ -33,7 +34,7 @@ namespace Task_1.Repository.Items
 
         public List<Item> GetAll()
         {
-            var emps = billingContext.Items.ToList();
+            var emps = billingContext.Items.AsNoTracking().ToList();
             if (emps != null)
             {
                 return emps;
@@ -43,7 +44,7 @@ namespace Task_1.Repository.Items
 
         public Item GetById(int id)
         {
-            var emp = billingContext.Items.FirstOrDefault(x => x.Id == id);
+            var emp = billingContext.Items.AsNoTracking().FirstOrDefault(x => x.Id == id);
             if (emp != null)
             {
                 return emp;

@@ -1,4 +1,5 @@
-﻿using Task_1.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Task_1.Models;
 
 namespace Task_1.Repository.Customers
 {
@@ -31,7 +32,7 @@ namespace Task_1.Repository.Customers
 
         public List<Customer> GetAll()
         {
-            var emps = billingContext.Customer.ToList();
+            var emps = billingContext.Customer.AsNoTracking().ToList();
             if (emps != null)
             {
                 return emps;
@@ -41,7 +42,7 @@ namespace Task_1.Repository.Customers
 
         public Customer GetById(int id)
         {
-            var emp = billingContext.Customer.FirstOrDefault(x => x.Id == id);
+            var emp = billingContext.Customer.AsNoTracking().FirstOrDefault(x => x.Id == id);
             if (emp != null)
             {
                 return emp;

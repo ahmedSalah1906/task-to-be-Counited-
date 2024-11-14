@@ -32,7 +32,7 @@ namespace Task_1.Repository.Billings
 
         public List<Billing> GetAll()
         {
-            var emps = billingContext.Billing.Include(i=>i.Items).Include(b=>b.Customer).Include(e=>e.Employee).ToList();
+            var emps = billingContext.Billing.Include(i=>i.Items).Include(b=>b.Customer).Include(e=>e.Employee).AsNoTracking().ToList();
             if (emps != null)
             {
                 return emps;
@@ -42,7 +42,7 @@ namespace Task_1.Repository.Billings
 
         public Billing GetById(int id)
         {
-            var emp = billingContext.Billing.Include(i => i.Items).Include(b => b.Customer).Include(e => e.Employee).FirstOrDefault(x => x.Id == id);
+            var emp = billingContext.Billing.Include(i => i.Items).Include(b => b.Customer).Include(e => e.Employee).AsNoTracking().FirstOrDefault(x => x.Id == id);
             if (emp != null)
             {
                 return emp;

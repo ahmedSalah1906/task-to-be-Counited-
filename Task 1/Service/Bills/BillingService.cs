@@ -50,13 +50,13 @@ namespace Task_1.Service.Bills
                 TotelPrice = x.TotelPrice,
 
                 Items = x.Items
-                    .Where(i => i != null && i.item != null)  
+                    
                     .Select(i => new BillingItemVm
                     {
                         Quntity = i.Quntity,
                         ItemId = i.ItemId,
                         BillingId = i.BillingId,
-                        Price = i.item.Price  ,  
+                          
                         Id = i.Id,
                     })
                     .ToList(),
@@ -73,7 +73,7 @@ namespace Task_1.Service.Bills
                 CreatedAt = DateTime.Now,
                 CustomerId = Bill.Customer.Id,
                 TotelPrice= Bill.TotelPrice,
-                
+               
                 EmployeeId = Bill.Employee.Id,
 
                 Items = Bill.Items.Select(i => new BillingItemVm
@@ -81,8 +81,9 @@ namespace Task_1.Service.Bills
                     Quntity = i.Quntity,
                     ItemId = i.ItemId,
                     BillingId = i.BillingId,
-                    Price=i.item.Price,
-                    Id = i.Id,
+                    
+                     Id = i.Id,
+                     
                 }).ToList(),
             };
             return billvm;

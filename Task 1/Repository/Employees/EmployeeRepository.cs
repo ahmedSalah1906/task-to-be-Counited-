@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Diagnostics;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Task_1.Models;
 
 namespace Task_1.Repository.Employees
@@ -33,7 +34,7 @@ namespace Task_1.Repository.Employees
 
         public List<Employee> GetAll()
         {
-            var emps = billingContext.Employees.ToList();
+            var emps = billingContext.Employees.AsNoTracking().ToList();
             if (emps!=null) 
             {
                 return emps;
@@ -43,7 +44,7 @@ namespace Task_1.Repository.Employees
 
         public Employee GetById(int id)
         {
-            var emp = billingContext.Employees.FirstOrDefault(x => x.Id == id);
+            var emp = billingContext.Employees.AsNoTracking().FirstOrDefault(x => x.Id == id);
             if (emp != null)
             {
                 return emp;

@@ -76,10 +76,11 @@ namespace Task_1.Controllers
         {
             var model = new BillingItemVm
             {
-                Id = index,
+                Id= index,
                 Items = itemService.GetAll().Select(i => new SelectListItem { Value = i.Id.ToString(), Text = i.Name }).ToList()
             };
-            
+
+            ViewData["Index"] = index;
 
             return PartialView("_ItemPartial", model);
         }
@@ -92,6 +93,25 @@ namespace Task_1.Controllers
                 return Json(item.Price);
             }
             return Json(0); 
+        }
+        [HttpGet]
+        public IActionResult Update(int id) 
+        {
+            var bill= billingService.GetById(id);
+            if (bill != null)
+            {
+                bill.EmployeesList = employeeService.GetAll().Select(e => new SelectListItem { Value = e.Id.ToString(), Text = e.Name }).ToList();
+                bill.CustomerList=customerService.GetAll().Select(e => new SelectListItem {Value = e.Id.ToString(),Text = e.Name}).ToList();
+                foreach (var item in bill.Items)
+                {
+                    item.Items = itemService.GetAll().Select(i => new SelectListItem { Value = i.Id.ToString(), Text = i.Name }).ToList();
+                }
+
+
+                return View("EditBill", bill);
+
+            }
+            return NotFound();
         }
 
 

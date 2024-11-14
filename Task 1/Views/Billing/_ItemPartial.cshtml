@@ -1,16 +1,18 @@
 ﻿@model Task_1.VM.BillingItemVm
 
+@{
+    int index = ViewData["Index"] as int? ?? 0;
+}
+
 <div class="item-row">
-    
-    <input type="hidden" asp-for="Id"; />
+    <input type="hidden" name="Items[@index].Id" value="@Model.Id" />
+
     <label>Item:</label>
-    <select asp-for="ItemId" asp-items="Model.Items" class="form-control item-select"></select>
+    <select name="Items[@index].ItemId" asp-for="ItemId" asp-items="Model.Items" class="form-control item-select"></select>
 
     <label>Price:</label>
-    <input type="text" asp-for="Price" class="form-control item-price" value="0" readonly />
+    <input type="text" name="Items[@index].Price" asp-for="Price" class="form-control item-price" value="0" readonly />
 
     <label>Quantity:</label>
-    <input type="number" asp-for="Quntity" class="form-control item-quantity" value="1" min="1" />
-
-    <br />
+    <input type="number" name="Items[@index].Quantity" asp-for="Quntity" class="form-control item-quantity" value="1" min="1" />
 </div>

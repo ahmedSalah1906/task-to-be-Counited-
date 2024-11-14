@@ -6,6 +6,7 @@ namespace Task_1.VM
 {
     public class BillingItemVm
     {
+
         public int Id { get; set; }
         public int? ItemId { get; set; }
         public decimal Price { get; set; }

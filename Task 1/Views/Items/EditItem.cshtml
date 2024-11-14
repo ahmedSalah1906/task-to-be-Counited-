@@ -1,6 +1,6 @@
 ﻿@model Task_1.VM.ItemVm
 <form asp-action="Update" method="post" class="form-horizontal">
-    <input type="hidden" asp-for="Id" />
+    <input type="text" hidden asp-for="Id" />
     <div class="form-group">
         <label asp-for="Name" class="control-label col-md-2">Name</label>
         <div class="col-md-4">
@@ -25,6 +25,8 @@
                     <button type="submit" class="btn btn-primary">Update Item</button>
                 </div>
             </div>
+        </div>
+    </div>
 </form>
 <div class="form-group mt-4">
     <a asp-action="Index" class="btn btn-secondary">Back to List</a>

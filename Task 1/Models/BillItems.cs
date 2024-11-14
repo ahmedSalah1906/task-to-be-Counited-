@@ -12,7 +12,7 @@ namespace Task_1.Models
         public virtual Billing billing { get; set; }
         [ForeignKey("Billing")]
         public int BillingId { get; set; }
-        public int Quntity { get; set; } = 1;
+        public int Quntity { get; set; } = 0;
 
     }
 }
